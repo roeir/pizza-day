@@ -1,0 +1,36 @@
+.site-header {
+    background-color: #fff;
+    flex: none;
+    box-shadow: rgba(0, 0, 0, 0.12) 0 1px 6px;
+}
+
+.site-header__inner {
+    display: flex;
+    padding: 20px 5%;
+}
+
+.site-nav {
+    margin-left: auto;
+}
+
+.site-nav__list {
+    display: flex;
+}
+
+.site-nav__item {
+    margin-left: 15px;
+}
+
+.site-nav__item a {
+    font-size: 16px;
+}
+
+.site-logo a {
+    text-transform: uppercase;
+    font-size: 18px;
+    text-decoration: none;
+}
+
+.site-logo a span {
+    font-weight: 700;
+}
