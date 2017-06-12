@@ -1,10 +1,32 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Validator from 'validator';
+import isEmpty from 'lodash/isEmpty';
+import forEach from 'lodash/forEach';
 import TextFieldGroup from '../common/TextFieldGroup';
 
 
 const validateInput = (data) => {
+  const errors = {};
 
+  forEach(data, (value, key) => {
+    if(Validator.isEmpty(value)) {
+      errors[key] = `The ${ key } field is required`;
+    }
+  });
+
+  if(!Validator.isEmail(data.email)) {
+    errors.email = 'The email field is invalid';
+  }
+
+  if(!Validator.equals(data.password, data.passwordConfirmation)) {
+    errors.passwordConfirmation = 'Passwords must match';
+  }
+
+  return {
+    errors,
+    isValid: isEmpty(errors)
+  }
 };
 
 class SignupForm extends Component {
@@ -37,6 +59,17 @@ class SignupForm extends Component {
     const payload = {
       username, email, password, passwordConfirmation
     };
+    const { errors, isValid } = validateInput(payload);
+    if(!isValid) {
+      this.setState({
+        errors
+      });
+      return;
+    }
+    this.setState({
+      errors: {},
+      isLoading: true
+    });
     this.props.userSignupRequest(payload)
       .then(({ data }) => {
         if(data.success) {

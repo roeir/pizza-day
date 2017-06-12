@@ -17,7 +17,7 @@ const validateInput = (data, otherValidations) => {
   }).then((user) => {
     if(user) {
       if (user.username === data.username) {
-        errors.username = 'There is user with such email';
+        errors.username = 'There is user with such username';
       }
       if (user.email === data.email) {
         errors.email = 'There is user with such email';
