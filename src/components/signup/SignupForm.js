@@ -2,6 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import TextFieldGroup from '../common/TextFieldGroup';
 
+
+const validateInput = (data) => {
+
+};
+
 class SignupForm extends Component {
   state = {
     username: '',
@@ -34,11 +39,16 @@ class SignupForm extends Component {
     };
     this.props.userSignupRequest(payload)
       .then(({ data }) => {
-        console.log(data);
+        if(data.success) {
+          console.log('good');
+        }
       })
       .catch(({ response }) => {
-        console.log(response);
-      })
+        this.setState({
+          errors: response.data,
+          isLoading: false
+        });
+      });
   };
 
   render() {
