@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import TextFieldGroup from '../common/TextFieldGroup';
 
 class SignupForm extends Component {
@@ -9,6 +10,10 @@ class SignupForm extends Component {
     passwordConfirmation: '',
     errors: {},
     isLoading: false
+  };
+
+  static propTypes = {
+    userSignupRequest: PropTypes.func.isRequired
   };
 
   handleInputChange = (event) => {
@@ -23,6 +28,17 @@ class SignupForm extends Component {
 
   handleFormSubmit = (event) => {
     event.preventDefault();
+    const { username, email, password, passwordConfirmation } = this.state;
+    const payload = {
+      username, email, password, passwordConfirmation
+    };
+    this.props.userSignupRequest(payload)
+      .then(({ data }) => {
+        console.log(data);
+      })
+      .catch(({ response }) => {
+        console.log(response);
+      })
   };
 
   render() {
@@ -79,6 +95,7 @@ class SignupForm extends Component {
             Sign up
           </button>
         </div>
+        <p>Or:</p>
         <div className="form-group">
           <button disabled={ this.state.isLoading } className="btn btn-default btn-lg" type="button">
             Sign up with Google
