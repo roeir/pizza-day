@@ -8,7 +8,7 @@ const SignupPage = (props) => {
   const { userSignupRequest } = props;
 
   return (
-    <div className="signup-page container">
+    <div className="signup-page">
       <div className="row">
         <div className="col-md-6 col-md-offset-3">
           <SignupForm
