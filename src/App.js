@@ -1,14 +1,27 @@
 import React, {Component} from "react";
 import {BrowserRouter as Router, Route} from "react-router-dom";
 import {Provider} from "react-redux";
+import decodeToken from 'jwt-decode';
 import {configureStore} from "./configureStore";
 import NavigationBar from "./components/NavigationBar";
 import HomePage from "./components/HomePage";
 import SignupPage from "./components/signup/SignupPage";
 import LoginPage from "./components/login/LoginPage";
 import FlashMessagesList from './components/flash/FlashMessageList';
+import setAuthToken from './utils/setAuthToken';
+import { setCurrentUser } from './actions/authActions';
 
 const store = configureStore();
+
+try {
+  if(localStorage['loginToken']) {
+    const token = localStorage.getItem('loginToken');
+    setAuthToken(token);
+    store.dispatch(setCurrentUser(decodeToken(token)));
+  }
+} catch (err) {
+  console.log(err);
+}
 
 class App extends Component {
   render() {

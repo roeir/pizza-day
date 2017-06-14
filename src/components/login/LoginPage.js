@@ -1,9 +1,12 @@
 import React from 'react';
+import LoginForm from './LoginForm';
 
 const LoginPage = () => {
   return (
-    <div className="login-page">
-      <h1>Login page</h1>
+    <div className="row">
+      <div className="col-md-4 col-md-offset-4">
+        <LoginForm />
+      </div>
     </div>
   );
 };
