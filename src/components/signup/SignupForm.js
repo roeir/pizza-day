@@ -1,8 +1,9 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import Validator from 'validator';
 import isEmpty from 'lodash/isEmpty';
 import forEach from 'lodash/forEach';
+import {withRouter} from 'react-router-dom';
 import TextFieldGroup from '../common/TextFieldGroup';
 
 
@@ -10,16 +11,16 @@ const validateInput = (data) => {
   const errors = {};
 
   forEach(data, (value, key) => {
-    if(Validator.isEmpty(value)) {
+    if (Validator.isEmpty(value)) {
       errors[key] = `The ${ key } field is required`;
     }
   });
 
-  if(!Validator.isEmail(data.email)) {
+  if (!Validator.isEmail(data.email)) {
     errors.email = 'The email field is invalid';
   }
 
-  if(!Validator.equals(data.password, data.passwordConfirmation)) {
+  if (!Validator.equals(data.password, data.passwordConfirmation)) {
     errors.passwordConfirmation = 'Passwords must match';
   }
 
@@ -41,7 +42,9 @@ class SignupForm extends Component {
 
   static propTypes = {
     userSignupRequest: PropTypes.func.isRequired,
-    checkUserExist: PropTypes.func.isRequired
+    checkUserExist: PropTypes.func.isRequired,
+    addFlashMessage: PropTypes.func.isRequired,
+    history: PropTypes.object.isRequired
   };
 
   handleInputChange = (event) => {
@@ -53,12 +56,12 @@ class SignupForm extends Component {
   checkUserExists = (event) => {
     const field = event.target.name;
     const value = event.target.value;
-    const errors = { ...this.state.errors };
-    if(!value.trim().length) {
+    const errors = {...this.state.errors};
+    if (!value.trim().length) {
       return;
     }
-    this.props.checkUserExist(value).then(({ data }) => {
-      if(data) {
+    this.props.checkUserExist(value).then(({data}) => {
+      if (data) {
         errors[field] = 'There is a user with such ' + field;
         this.setState({
           errors
@@ -74,12 +77,12 @@ class SignupForm extends Component {
 
   handleFormSubmit = (event) => {
     event.preventDefault();
-    const { username, email, password, passwordConfirmation } = this.state;
+    const {username, email, password, passwordConfirmation} = this.state;
     const payload = {
       username, email, password, passwordConfirmation
     };
-    const { errors, isValid } = validateInput(payload);
-    if(!isValid) {
+    const {errors, isValid} = validateInput(payload);
+    if (!isValid) {
       this.setState({
         errors
       });
@@ -90,12 +93,16 @@ class SignupForm extends Component {
       isLoading: true
     });
     this.props.userSignupRequest(payload)
-      .then(({ data }) => {
-        if(data.success) {
-          console.log('good');
+      .then(({data}) => {
+        if (data.success) {
+          this.props.addFlashMessage({
+            type: 'success',
+            text: 'You have sign up successfully. Welcome!'
+          });
+          this.props.history.push('/');
         }
       })
-      .catch(({ response }) => {
+      .catch(({response}) => {
         this.setState({
           errors: response.data,
           isLoading: false
@@ -168,4 +175,4 @@ class SignupForm extends Component {
   }
 }
 
-export default SignupForm;
+export default withRouter(SignupForm);

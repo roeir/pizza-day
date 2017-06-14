@@ -53,13 +53,15 @@ router.post('/', (req, res) => {
 router.get('/:ident', (req, res) => {
   const value = req.params.ident;
 
-  User.findOne({ $or: [
-    {email: value},
-    {username: value}
-  ]}, {_id: 0, username: 1, email: 1}).then(user => {
+  User.findOne({
+    $or: [
+      {email: value},
+      {username: value}
+    ]
+  }, {_id: 0, username: 1, email: 1}).then(user => {
     res.json(user);
   }).catch((err) => {
-      res.status(500).json({error: err});
+    res.status(500).json({error: err});
   });
 });
 
