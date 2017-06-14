@@ -5,3 +5,9 @@ export const userSignupRequest = (signupData) => {
     return axios.post('/api/users', signupData);
   };
 };
+
+export const isUserExist = (ident) => {
+  return (dispatch) => {
+    return axios.get(`/api/users/${ ident }`);
+  };
+};

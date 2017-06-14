@@ -40,7 +40,8 @@ class SignupForm extends Component {
   };
 
   static propTypes = {
-    userSignupRequest: PropTypes.func.isRequired
+    userSignupRequest: PropTypes.func.isRequired,
+    checkUserExist: PropTypes.func.isRequired
   };
 
   handleInputChange = (event) => {
@@ -50,7 +51,25 @@ class SignupForm extends Component {
   };
 
   checkUserExists = (event) => {
-
+    const field = event.target.name;
+    const value = event.target.value;
+    const errors = { ...this.state.errors };
+    if(!value.trim().length) {
+      return;
+    }
+    this.props.checkUserExist(value).then(({ data }) => {
+      if(data) {
+        errors[field] = 'There is a user with such ' + field;
+        this.setState({
+          errors
+        });
+      } else {
+        errors[field] = '';
+        this.setState({
+          errors
+        })
+      }
+    });
   };
 
   handleFormSubmit = (event) => {

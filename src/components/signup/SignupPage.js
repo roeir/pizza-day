@@ -1,11 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { userSignupRequest } from '../../actions/signupActions';
+import { userSignupRequest, isUserExist } from '../../actions/signupActions';
 import SignupForm from './SignupForm';
 
 const SignupPage = (props) => {
-  const { userSignupRequest } = props;
+  const { userSignupRequest, isUserExist } = props;
 
   return (
     <div className="signup-page">
@@ -13,6 +13,7 @@ const SignupPage = (props) => {
         <div className="col-md-6 col-md-offset-3">
           <SignupForm
             userSignupRequest={ userSignupRequest }
+            checkUserExist={ isUserExist }
           />
         </div>
       </div>
@@ -21,11 +22,13 @@ const SignupPage = (props) => {
 };
 
 SignupPage.propTypes = {
-  userSignupRequest: PropTypes.func.isRequired
+  userSignupRequest: PropTypes.func.isRequired,
+  isUserExist: PropTypes.func.isRequired
 };
 
 export default connect(null,
   {
-    userSignupRequest
+    userSignupRequest,
+    isUserExist
   }
 )(SignupPage);
