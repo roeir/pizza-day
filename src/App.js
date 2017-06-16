@@ -7,9 +7,11 @@ import NavigationBar from "./components/NavigationBar";
 import HomePage from "./components/HomePage";
 import SignupPage from "./components/signup/SignupPage";
 import LoginPage from "./components/login/LoginPage";
+import GroupsPage from './components/groups/GroupsPage';
 import FlashMessagesList from './components/flash/FlashMessageList';
 import setAuthToken from './utils/setAuthToken';
 import { setCurrentUser } from './actions/authActions';
+import requireAuth from './utils/requireAuth';
 
 const store = configureStore();
 
@@ -35,6 +37,7 @@ class App extends Component {
               <Route exact path="/" component={ HomePage }/>
               <Route path="/signup" component={ SignupPage }/>
               <Route path="/login" component={ LoginPage }/>
+              <Route path="/groups" component={ requireAuth(GroupsPage) }/>
             </div>
           </div>
         </Router>

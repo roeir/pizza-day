@@ -44,10 +44,6 @@ class LoginForm extends Component {
     });
   };
 
-  isValid = () => {
-
-  };
-
   onSubmit = (event) => {
     event.preventDefault();
 
@@ -109,7 +105,11 @@ class LoginForm extends Component {
         </div>
         <p>Or:</p>
         <div className="form-group">
-          <button disabled={ isLoading } className="btn btn-default btn-lg" type="button">
+          <button
+            disabled={ isLoading }
+            className="btn btn-default btn-lg"
+            type="button"
+          >
             Login with Google
           </button>
         </div>

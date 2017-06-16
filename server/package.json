@@ -17,6 +17,7 @@
     "lodash": "^4.17.4",
     "mongoose": "^4.10.5",
     "passport": "^0.3.2",
+    "passport-google-oauth20": "^1.0.0",
     "passport-http-bearer": "^1.0.1",
     "passport-local": "^1.0.0",
     "validator": "^7.0.0"

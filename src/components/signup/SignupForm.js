@@ -164,12 +164,6 @@ class SignupForm extends Component {
             Sign up
           </button>
         </div>
-        <p>Or:</p>
-        <div className="form-group">
-          <button disabled={ this.state.isLoading } className="btn btn-default btn-lg" type="button">
-            Sign up with Google
-          </button>
-        </div>
       </form>
     );
   }
