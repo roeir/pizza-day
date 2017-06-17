@@ -1,0 +1,46 @@
+.user-list {
+    margin-bottom: 20px;
+}
+
+.user-list__item {
+    border-bottom: 1px solid lightgrey;
+}
+
+.user-list__item:last-child {
+    border-bottom: none;
+}
+
+.user-list__item label {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0;
+    cursor: pointer;
+    background-color: #E3F2FD;
+    transition: background 200ms ease-in-out;
+    color: #2E2D33;
+    padding: 0 5px;
+}
+
+.user-item {
+    padding: 10px 3px;
+}
+
+.user-list__item label:hover {
+    background-color: #BBDEFB;
+}
+
+.user-list__item label.selected {
+    background-color: #BBDEFB;
+}
+
+.user-list__item label input {
+    margin-top: 0;
+    margin-right: 10px;
+    width: 15px;
+    height: 15px;
+}
+
+.user-item .username {
+    flex: auto;
+}
+

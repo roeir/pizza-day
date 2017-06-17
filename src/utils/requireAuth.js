@@ -25,7 +25,7 @@ export default (ComposedComponent) => {
       return (
         <div>
           { isAuthenticated ? <ComposedComponent {...this.props} /> :
-            <Redirect to={{ pathname: '/login' }} />
+            <Redirect to={{ pathname: '/' }} />
           }
         </div>
       );

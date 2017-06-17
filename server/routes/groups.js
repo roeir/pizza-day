@@ -3,7 +3,7 @@ const authenticate = require('../middlewares/authenticate');
 
 const router = express.Router();
 
-router.get('/', authenticate, (req, res) => {
+router.get('/create', authenticate, (req, res) => {
   res.json({ success: true });
 });
 

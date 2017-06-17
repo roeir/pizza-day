@@ -22,7 +22,7 @@ const NavigationBar = (props) => {
   const userLinks = (
     <ul className="site-nav__list">
       <li className="site-nav__item">
-        <Link to="/groups">Groups</Link>
+        <Link to="/groups/create">Groups</Link>
       </li>
       <li className="site-nav__item">
         <Link to="/" onClick={ event => { event.preventDefault(); props.logout(); } }>Logout</Link>

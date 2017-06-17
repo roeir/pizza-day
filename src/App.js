@@ -7,7 +7,7 @@ import NavigationBar from "./components/NavigationBar";
 import HomePage from "./components/HomePage";
 import SignupPage from "./components/signup/SignupPage";
 import LoginPage from "./components/login/LoginPage";
-import GroupsPage from './components/groups/GroupsPage';
+import GroupCreator from './components/groups/GroupCreator';
 import FlashMessagesList from './components/flash/FlashMessageList';
 import setAuthToken from './utils/setAuthToken';
 import { setCurrentUser } from './actions/authActions';
@@ -37,7 +37,7 @@ class App extends Component {
               <Route exact path="/" component={ HomePage }/>
               <Route path="/signup" component={ SignupPage }/>
               <Route path="/login" component={ LoginPage }/>
-              <Route path="/groups" component={ requireAuth(GroupsPage) }/>
+              <Route path="/groups/create" component={ requireAuth(GroupCreator) }/>
             </div>
           </div>
         </Router>
