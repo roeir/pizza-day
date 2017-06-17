@@ -11,7 +11,7 @@ const UserList = (props) => {
         users.map(user => {
           return (
             <li className="user-list__item" key={ user._id }>
-              <UserItemSelectable user={ user } />
+              <UserItemSelectable onChange={ props.handleToggle } user={ user } />
             </li>
           )
         })
@@ -21,7 +21,8 @@ const UserList = (props) => {
 };
 
 UserList.propTypes = {
-  users: PropTypes.arrayOf(PropTypes.object).isRequired
+  users: PropTypes.arrayOf(PropTypes.object).isRequired,
+  handleToggle: PropTypes.func.isRequired
 };
 
 export default UserList;

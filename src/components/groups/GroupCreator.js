@@ -3,13 +3,15 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { loadUserRequest } from '../../actions/userActions';
 import { addFlashMessage } from '../../actions/flashMessages';
+import { findById, toggleUser, updateUser } from '../../utils/userHelpers';
 import UserList from '../user/UserList';
 import Search from '../common/SimpleSearch';
 
 class GroupCreator extends Component {
   state = {
     users: [],
-    usersLoaded: false
+    usersLoaded: false,
+    searchQuery: ''
   };
 
   static propTypes = {
@@ -39,8 +41,34 @@ class GroupCreator extends Component {
     });
   }
 
+  handleToggle = (id) => {
+    const { users } = this.state;
+    const user = findById(id, users);
+    const toggledUser = toggleUser(user);
+    const updatedUsers = updateUser(users, toggledUser);
+    this.setState({
+      users: updatedUsers,
+      searchQuery: ''
+    });
+  };
+
+  handleSearch = (event) => {
+    const searchQuery = event.target.value;
+    this.setState({
+      searchQuery
+    });
+  };
+
+  getVisibleUsers(list, query) {
+    return list.filter(user => {
+      const searchValue = user.username.toLowerCase();
+      return searchValue.indexOf(query) !== -1;
+    });
+  };
+
   render() {
-    const { users, usersLoaded } = this.state;
+    const { users, usersLoaded, searchQuery } = this.state;
+    const visibleUsers = this.getVisibleUsers(users, searchQuery);
     return (
       <div className="container">
         <div className="row">
@@ -48,8 +76,11 @@ class GroupCreator extends Component {
             <h1>User group <small>create a new one</small></h1>
           </div>
           <div className="col-md-4">
-            <Search />
-            { usersLoaded ? <UserList users={ users } /> : <p>Loading user list...</p> }
+            <Search value={ searchQuery } onChange={ this.handleSearch } />
+            { usersLoaded ? <UserList
+              users={ visibleUsers }
+              handleToggle={ this.handleToggle }
+            /> : <p>Loading user list...</p> }
           </div>
           <div className="col-md-6 col-md-offset-1">
             groupeditor
