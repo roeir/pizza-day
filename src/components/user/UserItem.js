@@ -5,7 +5,10 @@ const UserItem = (props) => {
   return (
     <div className="user-item">
       <span className="username">
-        { props.user.username }
+        Username: { props.user.username }
+      </span>
+      <span className="usermail">
+        Email: { props.user.email }
       </span>
     </div>
   );

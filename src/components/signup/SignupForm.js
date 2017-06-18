@@ -126,7 +126,7 @@ class SignupForm extends Component {
         <TextFieldGroup
           value={ username }
           onChange={ this.handleInputChange }
-          checkUserExists={ this.checkUserExists }
+          checkDataExists={ this.checkUserExists }
           name="username"
           label="Username"
           error={ errors.username }
@@ -134,7 +134,7 @@ class SignupForm extends Component {
 
         <TextFieldGroup
           value={ email }
-          checkUserExists={ this.checkUserExists }
+          checkDataExists={ this.checkUserExists }
           onChange={ this.handleInputChange }
           name="email"
           label="Email"

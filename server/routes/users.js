@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const isEmpty = require('lodash/isEmpty');
 const User = require('../models/user');
 const commonValidations = require('../utils/validations/signup');
+const authenticate = require('../middlewares/authenticate');
 
 const router = express.Router();
 
@@ -50,7 +51,7 @@ router.post('/', (req, res) => {
     });
 });
 
-router.get('/', (req, res) => {
+router.get('/', authenticate, (req, res) => {
   User.find({}, {_id: 1, username: 1, email: 1})
     .then(users => {
       res.json(users);

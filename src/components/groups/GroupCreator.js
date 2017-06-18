@@ -6,6 +6,7 @@ import { addFlashMessage } from '../../actions/flashMessages';
 import { findById, toggleUser, updateUser } from '../../utils/userHelpers';
 import UserList from '../user/UserList';
 import Search from '../common/SimpleSearch';
+import GroupEditor from './GropEditor';
 
 class GroupCreator extends Component {
   state = {
@@ -59,6 +60,14 @@ class GroupCreator extends Component {
     });
   };
 
+  handleSelectedReset = () => {
+    const { users } = this.state;
+    const usersInitial = this.makeSelectable(users);
+    this.setState({
+      users: usersInitial
+    });
+  };
+
   getVisibleUsers(list, query) {
     return list.filter(user => {
       const searchValue = user.username.toLowerCase();
@@ -66,9 +75,16 @@ class GroupCreator extends Component {
     });
   };
 
+  getSelectedUsers(list) {
+    return list.filter(user => {
+      return user.selected === true;
+    });
+  }
+
   render() {
     const { users, usersLoaded, searchQuery } = this.state;
     const visibleUsers = this.getVisibleUsers(users, searchQuery);
+    const selectedUsers = this.getSelectedUsers(users);
     return (
       <div className="container">
         <div className="row">
@@ -76,6 +92,7 @@ class GroupCreator extends Component {
             <h1>User group <small>create a new one</small></h1>
           </div>
           <div className="col-md-4">
+            <p>Select user to invite:</p>
             <Search value={ searchQuery } onChange={ this.handleSearch } />
             { usersLoaded ? <UserList
               users={ visibleUsers }
@@ -83,7 +100,11 @@ class GroupCreator extends Component {
             /> : <p>Loading user list...</p> }
           </div>
           <div className="col-md-6 col-md-offset-1">
-            groupeditor
+            <GroupEditor
+              selectedUsers={ selectedUsers }
+              handleToggle={ this.handleToggle }
+              handleSelectedReset={ this.handleSelectedReset }
+            />
           </div>
         </div>
       </div>
