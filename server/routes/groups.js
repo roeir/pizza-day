@@ -32,7 +32,8 @@ router.post('/', (req, res) => {
         Group.create({
           name: groupName,
           logo: groupLogo,
-          'users.invited': invitedUsers
+          'users.invited': invitedUsers,
+          'users.confirmed': [req.currentUser._id]
         }).then((group) => {
           const userIds = invitedUsers.map(userId => {
             return new mongoose.Types.ObjectId(userId);
@@ -43,6 +44,9 @@ router.post('/', (req, res) => {
           }).then(users => {
             users.forEach(user => {
               user.groups.invited.push(group._id);
+              if(user._id.toString() === req.currentUser._id.toString()) {
+                user.groups.confirmed.push(group._id);
+              }
               user.save((err, data) => {
                 if(err) {
                   res.status(500).json({error: err});
