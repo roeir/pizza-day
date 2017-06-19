@@ -2,32 +2,27 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
-const UserSchema = new Schema({
-  username: {
+const GroupSchema = new Schema({
+  name: {
     type: String,
     required: true,
     unique: true
   },
-  email: {
-    type: String,
-    required: true,
-    unique: true
-  },
-  password: {
+  logo: {
     type: String,
     required: true
   },
-  groups: {
+  users: {
     invited: [{
       type: Schema.Types.ObjectId,
-      ref: 'Group'
+      ref: 'User'
     }],
     confirmed: [{
       type: Schema.Types.ObjectId,
-      ref: 'Group'
+      ref: 'User'
     }]
   }
 }, {timestamps: true});
 
-const User = mongoose.model('User', UserSchema);
-module.exports = User;
+const Group = mongoose.model('Group', GroupSchema);
+module.exports = Group;

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { loadUserRequest } from '../../actions/userActions';
 import { addFlashMessage } from '../../actions/flashMessages';
-import { findById, toggleUser, updateUser } from '../../utils/userHelpers';
+import { findById, toggleUser, updateUser } from '../../utils/newGroupHelpers';
 import UserList from '../user/UserList';
 import Search from '../common/SimpleSearch';
 import GroupEditor from './GropEditor';

@@ -19,7 +19,7 @@ const GroupForm = ({ onChange, formValues, isLoading, errors, onSubmit, checkGro
         <TextFieldGroup
           name="groupLogo"
           value={ formValues.groupLogo }
-          label="Group name"
+          label="Group logo"
           placeholder="http://example.com/image-url"
           error={ errors.groupLogo }
           onChange={ onChange }
