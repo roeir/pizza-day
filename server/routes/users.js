@@ -55,9 +55,10 @@ router.get('/', authenticate, (req, res) => {
   User.find({}, {_id: 1, username: 1, email: 1})
     .then(users => {
       res.json(users);
-    }).catch(err => {
-    res.status(500).json({error: err});
-  })
+    })
+    .catch(err => {
+      res.status(500).json({error: err});
+    })
 });
 
 router.get('/:ident', (req, res) => {

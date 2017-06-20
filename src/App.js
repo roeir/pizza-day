@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {BrowserRouter as Router, Route} from "react-router-dom";
+import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import {Provider} from "react-redux";
 import decodeToken from 'jwt-decode';
 import {configureStore} from "./configureStore";
@@ -8,6 +8,7 @@ import HomePage from "./components/HomePage";
 import SignupPage from "./components/signup/SignupPage";
 import LoginPage from "./components/login/LoginPage";
 import GroupCreator from './components/groups/GroupCreator';
+import GroupsList from './components/groups/GroupsList';
 import FlashMessagesList from './components/flash/FlashMessageList';
 import setAuthToken from './utils/setAuthToken';
 import { setCurrentUser } from './actions/authActions';
@@ -37,7 +38,10 @@ class App extends Component {
               <Route exact path="/" component={ HomePage }/>
               <Route path="/signup" component={ SignupPage }/>
               <Route path="/login" component={ LoginPage }/>
-              <Route path="/groups/create" component={ requireAuth(GroupCreator) }/>
+              <Switch>
+                <Route path="/groups/create" component={ requireAuth(GroupCreator) }/>
+                <Route path="/groups" component={ requireAuth(GroupsList) }/>
+              </Switch>
             </div>
           </div>
         </Router>

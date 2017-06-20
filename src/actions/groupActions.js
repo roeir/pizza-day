@@ -6,6 +6,18 @@ export const createGroupRequest = (groupData) => {
   };
 };
 
+export const fetchUserGroups = () => {
+  return (dispatch) => {
+    return axios.get('/api/groups');
+  };
+};
+
+export const joinUserRequest = (groupId, userData) => {
+  return (dispatch) => {
+    return axios.put(`/api/groups/${ groupId }`, userData);
+  };
+};
+
 export const isGroupExist = (ident) => {
   return (dispatch) => {
     return axios.get(`/api/groups/${ ident }`);

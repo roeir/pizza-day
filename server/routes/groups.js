@@ -71,15 +71,46 @@ router.post('/', (req, res) => {
     })
 });
 
+router.get('/', (req, res) => {
+  User.findById(req.currentUser._id).populate('groups', 'name logo users').exec()
+    .then(user => {
+      res.json(user.groups);
+    })
+    .catch(err => {
+      res.status(500).json({error: err});
+    })
+});
+
 router.get('/:ident', (req, res) => {
   const value = req.params.ident;
 
   Group.findOne({ name: value }, { name: 1 })
     .then(group => {
       res.json(group);
-    }).catch((err) => {
-    res.status(500).json({error: err});
+    })
+    .catch((err) => {
+      res.status(500).json({error: err});
+    }
+  );
+});
+
+router.put('/:groupId', (req, res) => {
+  const { groupId } = req.params;
+  Group.findById(groupId).then(group => {
+    if(group) {
+      const userToUpdate = group.users.find(user => {
+        return user.user.toString() === req.body.id;
+      });
+      userToUpdate.confirmed = true;
+      group.save((err) => {
+        if(err) {
+          res.status(500).json({error: err});
+        }
+      });
+      res.json({ success: true });
+    }
   });
+  // res.json({ success: true });
 });
 
 module.exports = router;

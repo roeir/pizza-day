@@ -1,0 +1,12 @@
+.caption p,
+.caption h3 {
+    text-align: center;
+}
+
+.caption button {
+    margin-right: 7px;
+}
+
+.caption button:last-child {
+    margin-right: 0;
+}
