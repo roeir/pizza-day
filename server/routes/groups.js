@@ -26,14 +26,21 @@ const validateInput = (data, otherValidations) => {
 router.post('/', (req, res) => {
   const { groupName, groupLogo, invitedUsers } = req.body;
 
+  const users = invitedUsers.map(userId => {
+    return {
+      user: userId,
+      confirmed: userId === req.currentUser._id.toString()
+    }
+  });
+
   validateInput({ groupName, groupLogo }, commonValidations)
     .then(({ errors, isValid }) => {
       if(isValid) {
         Group.create({
           name: groupName,
           logo: groupLogo,
-          'users.invited': invitedUsers,
-          'users.confirmed': [req.currentUser._id]
+          createdBy: req.currentUser._id,
+          users,
         }).then((group) => {
           const userIds = invitedUsers.map(userId => {
             return new mongoose.Types.ObjectId(userId);
@@ -43,11 +50,8 @@ router.post('/', (req, res) => {
             _id: { $in: [ ...userIds ] }
           }).then(users => {
             users.forEach(user => {
-              user.groups.invited.push(group._id);
-              if(user._id.toString() === req.currentUser._id.toString()) {
-                user.groups.confirmed.push(group._id);
-              }
-              user.save((err, data) => {
+              user.groups.push(group._id);
+              user.save((err) => {
                 if(err) {
                   res.status(500).json({error: err});
                 }

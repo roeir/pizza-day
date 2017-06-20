@@ -17,16 +17,10 @@ const UserSchema = new Schema({
     type: String,
     required: true
   },
-  groups: {
-    invited: [{
-      type: Schema.Types.ObjectId,
-      ref: 'Group'
-    }],
-    confirmed: [{
-      type: Schema.Types.ObjectId,
-      ref: 'Group'
-    }]
-  }
+  groups: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Group'
+  }]
 }, {timestamps: true});
 
 const User = mongoose.model('User', UserSchema);

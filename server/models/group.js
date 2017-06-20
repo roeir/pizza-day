@@ -12,16 +12,18 @@ const GroupSchema = new Schema({
     type: String,
     required: true
   },
-  users: {
-    invited: [{
+  createdBy: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
+  users: [{
+    user: {
       type: Schema.Types.ObjectId,
       ref: 'User'
-    }],
-    confirmed: [{
-      type: Schema.Types.ObjectId,
-      ref: 'User'
-    }]
-  }
+    },
+    confirmed: Boolean
+  }]
 }, {timestamps: true});
 
 const Group = mongoose.model('Group', GroupSchema);
