@@ -39,6 +39,7 @@ class App extends Component {
               <Route path="/signup" component={ SignupPage }/>
               <Route path="/login" component={ LoginPage }/>
               <Switch>
+                <Route path="/groups/create/:id" component={ requireAuth(GroupCreator) }/>
                 <Route path="/groups/create" component={ requireAuth(GroupCreator) }/>
                 <Route path="/groups" component={ requireAuth(GroupsList) }/>
               </Switch>

@@ -4,8 +4,10 @@ import forEach from 'lodash/forEach';
 import isEmpty from 'lodash/isEmpty';
 import Validator from 'validator';
 import {connect} from 'react-redux';
+import isEqual from 'lodash/isEqual';
+import { Redirect } from 'react-router-dom';
 import {addFlashMessage} from '../../actions/flashMessages';
-import {createGroupRequest, isGroupExist} from '../../actions/groupActions';
+import {createGroupRequest} from '../../actions/groupActions';
 import UserList from '../user/UserList';
 import GroupForm from './GroupForm';
 
@@ -33,9 +35,10 @@ class GroupEditor extends Component {
   static propTypes = {
     selectedUsers: PropTypes.arrayOf(PropTypes.object).isRequired,
     handleToggle: PropTypes.func.isRequired,
-    handleSelectedReset: PropTypes.func.isRequired,
     addFlashMessage: PropTypes.func.isRequired,
-    createGroupRequest: PropTypes.func.isRequired
+    createGroupRequest: PropTypes.func.isRequired,
+    formValues: PropTypes.object.isRequired,
+    groupId: PropTypes.string
   };
 
   state = {
@@ -43,9 +46,18 @@ class GroupEditor extends Component {
       groupName: '',
       groupLogo: '',
     },
+    redirect: false,
     errors: {},
     isLoading: false
   };
+
+  componentWillReceiveProps(nextProps) {
+    if(!isEqual(nextProps.formValues, this.props.formValues)) {
+      this.setState({
+        formValues: nextProps.formValues
+      });
+    }
+  }
 
   handleInputsChange = (event) => {
     const {formValues} = this.state;
@@ -57,36 +69,11 @@ class GroupEditor extends Component {
     });
   };
 
-  checkGroupExist = (event) => {
-    const field = event.target.name;
-    const value = event.target.value;
-    const errors = { ...this.state.errors };
-
-    if(!value.trim().length) {
-      return;
-    }
-
-    this.props.isGroupExist(value)
-      .then(({ data }) => {
-        if (data) {
-          errors[field] = 'There is a group with such ' + field;
-          this.setState({
-            errors
-          });
-        } else {
-          errors[field] = '';
-          this.setState({
-            errors
-          })
-        }
-      })
-  };
-
   handleFormSubmit = (event) => {
     event.preventDefault();
 
     const {formValues} = this.state;
-    const {selectedUsers} = this.props;
+    const {selectedUsers, groupId} = this.props;
     const {errors, isValid} = validateInput(formValues);
 
     if (!isValid) {
@@ -103,6 +90,7 @@ class GroupEditor extends Component {
 
     const payload = {
       ...formValues,
+      groupId,
       invitedUsers: selectedUsers.map(user => {
         return user._id;
       })
@@ -113,16 +101,12 @@ class GroupEditor extends Component {
         if (data.success) {
           this.props.addFlashMessage({
             type: 'success',
-            text: 'You have created a new group successfully!'
+            text: 'Done!'
           });
           this.setState({
             isLoading: false,
-            formValues: {
-              groupName: '',
-              groupLogo: '',
-            }
+            redirect: true
           });
-          this.props.handleSelectedReset();
         }
       })
       .catch(({response: {data}}) => {
@@ -136,24 +120,31 @@ class GroupEditor extends Component {
 
   render() {
     const {handleToggle, selectedUsers} = this.props;
-    const {formValues, isLoading, errors} = this.state;
+    const {formValues, isLoading, errors, redirect} = this.state;
     return (
       <div>
-        <div className="group-form-wrap">
-          <GroupForm
-            checkGroupExist={ this.checkGroupExist }
-            onSubmit={ this.handleFormSubmit }
-            onChange={ this.handleInputsChange }
-            formValues={ formValues }
-            isLoading={ isLoading }
-            errors={ errors }
-          />
-        </div>
-        <p>Selected user:</p>
-        <UserList
-          users={ selectedUsers }
-          handleToggle={ handleToggle }
-        />
+        {
+          redirect ? (
+            <Redirect to="/groups" />
+          ) : (
+            <div>
+              <div className="group-form-wrap">
+                <GroupForm
+                  onSubmit={ this.handleFormSubmit }
+                  onChange={ this.handleInputsChange }
+                  formValues={ formValues }
+                  isLoading={ isLoading }
+                  errors={ errors }
+                />
+              </div>
+              <p>Selected user:</p>
+              <UserList
+                users={ selectedUsers }
+                handleToggle={ handleToggle }
+              />
+            </div>
+          )
+        }
       </div>
     );
   }
@@ -161,5 +152,5 @@ class GroupEditor extends Component {
 
 export default connect(
   null,
-  {addFlashMessage, createGroupRequest, isGroupExist}
+  {addFlashMessage, createGroupRequest}
 )(GroupEditor);

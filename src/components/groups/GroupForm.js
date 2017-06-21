@@ -2,13 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import TextFieldGroup from '../common/TextFieldGroup';
 
-const GroupForm = ({ onChange, formValues, isLoading, errors, onSubmit, checkGroupExist }) => {
+const GroupForm = ({ onChange, formValues, isLoading, errors, onSubmit }) => {
   return (
     <div>
       <p>Group information:</p>
       <form onSubmit={ onSubmit }>
         <TextFieldGroup
-          checkDataExists={ checkGroupExist }
           name="groupName"
           value={ formValues.groupName }
           label="Group name"
@@ -37,7 +36,6 @@ const GroupForm = ({ onChange, formValues, isLoading, errors, onSubmit, checkGro
 
 GroupForm.propTypes = {
   onChange: PropTypes.func.isRequired,
-  checkGroupExist: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   formValues: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired,

@@ -13,7 +13,8 @@ const validateInput = (data, otherValidations) => {
   return Group.findOne({ name: data.groupName })
     .then(group => {
       if(group) {
-        errors.groupName = 'There is group with such name. The group name must be a unique name!'
+        // some validations
+        // errors.groupName = 'There is group with such name. The group name must be a unique name!'
       }
 
       return {
@@ -24,7 +25,7 @@ const validateInput = (data, otherValidations) => {
 };
 
 router.post('/', (req, res) => {
-  const { groupName, groupLogo, invitedUsers } = req.body;
+  const { groupName, groupLogo, invitedUsers, groupId } = req.body;
 
   const users = invitedUsers.map(userId => {
     return {
@@ -36,27 +37,69 @@ router.post('/', (req, res) => {
   validateInput({ groupName, groupLogo }, commonValidations)
     .then(({ errors, isValid }) => {
       if(isValid) {
-        Group.create({
+        Group.findOneAndUpdate({ _id: groupId || new mongoose.Types.ObjectId }, {
           name: groupName,
           logo: groupLogo,
-          createdBy: req.currentUser._id,
-          users,
-        }).then((group) => {
-          const userIds = invitedUsers.map(userId => {
-            return new mongoose.Types.ObjectId(userId);
+          createdBy: req.currentUser._id
+        }, { upsert: true, new: true, setDefaultsOnInsert: true })
+        .then((group) => {
+
+          // find all removed users
+          const prevGroupUsers = group.users;
+          const oldUsers = prevGroupUsers.filter(prevUser => {
+            return users.every(newUser => {
+              return newUser.user.toString() !== prevUser.user.toString();
+            });
+          });
+
+          // remove invites from all removed users
+          const oldUserIds = oldUsers.map(user => {
+            return new mongoose.Types.ObjectId(user.user);
           });
 
           User.find({
-            _id: { $in: [ ...userIds ] }
+            _id: { $in: [ ...oldUserIds ] }
           }).then(users => {
             users.forEach(user => {
-              user.groups.push(group._id);
+              // console.log(user.groups);
+              const index = user.groups.indexOf(group._id);
+              user.groups.splice(index, 1);
               user.save((err) => {
                 if(err) {
                   res.status(500).json({error: err});
                 }
-              })
-            })
+              });
+            });
+          }).catch((err) => {
+            res.status(500).json({error: err});
+          });
+
+
+          // Create new group user list
+          group.users = users;
+          group.save(err => {
+            if(err) {
+              res.status(500).json({error: err});
+            }
+          });
+
+          // send invites to new users
+          const userIds = group.users.map(user => {
+            return new mongoose.Types.ObjectId(user.user);
+          });
+          User.find({
+            _id: { $in: [ ...userIds ] }
+          }).then(users => {
+            users.forEach(user => {
+              if(user.groups.indexOf(group._id) === -1) {
+                user.groups.push(group._id);
+                user.save((err) => {
+                  if(err) {
+                    res.status(500).json({error: err});
+                  }
+                });
+              }
+            });
           }).catch((err) => {
             res.status(500).json({error: err});
           });
@@ -72,26 +115,13 @@ router.post('/', (req, res) => {
 });
 
 router.get('/', (req, res) => {
-  User.findById(req.currentUser._id).populate('groups', 'name logo users').exec()
+  User.findById(req.currentUser._id).populate('groups', 'name logo users createdBy').exec()
     .then(user => {
       res.json(user.groups);
     })
     .catch(err => {
       res.status(500).json({error: err});
     })
-});
-
-router.get('/:ident', (req, res) => {
-  const value = req.params.ident;
-
-  Group.findOne({ name: value }, { name: 1 })
-    .then(group => {
-      res.json(group);
-    })
-    .catch((err) => {
-      res.status(500).json({error: err});
-    }
-  );
 });
 
 router.put('/:groupId', (req, res) => {

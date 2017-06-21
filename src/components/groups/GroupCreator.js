@@ -9,15 +9,22 @@ import Search from '../common/SimpleSearch';
 import GroupEditor from './GropEditor';
 
 class GroupCreator extends Component {
+  static propTypes = {
+    currentUser: PropTypes.object.isRequired,
+    loadUserRequest: PropTypes.func.isRequired,
+    match: PropTypes.object.isRequired,
+    location: PropTypes.object.isRequired
+  };
+
+
   state = {
     users: [],
     usersLoaded: false,
+    formValues: {
+      groupName: '',
+      groupLogo: '',
+    },
     searchQuery: ''
-  };
-
-  static propTypes = {
-    currentUser: PropTypes.object.isRequired,
-    loadUserRequest: PropTypes.func.isRequired
   };
 
   makeSelectable = (users) => {
@@ -28,12 +35,34 @@ class GroupCreator extends Component {
   };
 
   componentDidMount() {
+    const { match: { params }, location: { state } } = this.props;
+
     this.props.loadUserRequest().then(({ data }) => {
       const users = this.makeSelectable(data);
+
       this.setState({
         users,
         usersLoaded: true
       });
+
+      if(params.id) {
+        const { users } = this.state;
+        const selectedUsers = users.map(user => {
+          user.selected = state.users.some(receivedUser => {
+            return user._id === receivedUser.user;
+          });
+          return user;
+        });
+        const formValues = {
+          groupName: state.name,
+          groupLogo: state.logo
+        };
+
+        this.setState({
+          users: selectedUsers,
+          formValues
+        });
+      }
     }).catch(() => {
       this.props.addFlashMessage({
         type: 'error',
@@ -60,14 +89,6 @@ class GroupCreator extends Component {
     });
   };
 
-  handleSelectedReset = () => {
-    const { users } = this.state;
-    const usersInitial = this.makeSelectable(users);
-    this.setState({
-      users: usersInitial
-    });
-  };
-
   getVisibleUsers(list, query) {
     return list.filter(user => {
       const searchValue = user.username.toLowerCase();
@@ -82,7 +103,7 @@ class GroupCreator extends Component {
   }
 
   render() {
-    const { users, usersLoaded, searchQuery } = this.state;
+    const { users, usersLoaded, searchQuery, formValues } = this.state;
     const visibleUsers = this.getVisibleUsers(users, searchQuery);
     const selectedUsers = this.getSelectedUsers(users);
     return (
@@ -101,9 +122,10 @@ class GroupCreator extends Component {
           </div>
           <div className="col-md-6 col-md-offset-1">
             <GroupEditor
+              groupId={ this.props.match.params.id }
+              formValues={ formValues }
               selectedUsers={ selectedUsers }
               handleToggle={ this.handleToggle }
-              handleSelectedReset={ this.handleSelectedReset }
             />
           </div>
         </div>

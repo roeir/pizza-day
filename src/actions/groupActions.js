@@ -17,9 +17,3 @@ export const joinUserRequest = (groupId, userData) => {
     return axios.put(`/api/groups/${ groupId }`, userData);
   };
 };
-
-export const isGroupExist = (ident) => {
-  return (dispatch) => {
-    return axios.get(`/api/groups/${ ident }`);
-  };
-};
