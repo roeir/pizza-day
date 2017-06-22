@@ -57,22 +57,24 @@ router.post('/', (req, res) => {
             return new mongoose.Types.ObjectId(user.user);
           });
 
-          User.find({
-            _id: { $in: [ ...oldUserIds ] }
-          }).then(users => {
-            users.forEach(user => {
-              // console.log(user.groups);
-              const index = user.groups.indexOf(group._id);
-              user.groups.splice(index, 1);
-              user.save((err) => {
-                if(err) {
-                  res.status(500).json({error: err});
-                }
+          if(oldUserIds.length) {
+            User.find({
+              _id: { $in: [ ...oldUserIds ] }
+            }).then(users => {
+              users.forEach(user => {
+                // console.log(user.groups);
+                const index = user.groups.indexOf(group._id);
+                user.groups.splice(index, 1);
+                user.save((err) => {
+                  if(err) {
+                    res.status(500).json({error: err});
+                  }
+                });
               });
+            }).catch((err) => {
+              res.status(500).json({error: err});
             });
-          }).catch((err) => {
-            res.status(500).json({error: err});
-          });
+          }
 
 
           // Create new group user list

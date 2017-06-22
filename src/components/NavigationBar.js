@@ -22,6 +22,9 @@ const NavigationBar = (props) => {
   const userLinks = (
     <ul className="site-nav__list">
       <li className="site-nav__item">
+        <Link to="/events">Events</Link>
+      </li>
+      <li className="site-nav__item">
         <Link to="/groups">Groups</Link>
       </li>
       <li className="site-nav__item">

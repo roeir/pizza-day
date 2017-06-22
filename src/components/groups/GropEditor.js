@@ -114,7 +114,7 @@ class GroupEditor extends Component {
           errors: data.errors,
           isLoading: false
         });
-      })
+      });
 
   };
 

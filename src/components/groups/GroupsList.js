@@ -3,9 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import CardsList from '../card/CardsList';
-import { fetchUserGroups } from '../../actions/groupActions';
+import { fetchUserGroups, joinUserRequest } from '../../actions/groupActions';
 import { addFlashMessage } from '../../actions/flashMessages';
-import { joinUserRequest } from '../../actions/groupActions';
 
 const GroupList = ({ joinUserRequest, fetchUserGroups, addFlashMessage, currentUser }) => {
   return (

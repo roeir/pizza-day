@@ -9,6 +9,8 @@ import SignupPage from "./components/signup/SignupPage";
 import LoginPage from "./components/login/LoginPage";
 import GroupCreator from './components/groups/GroupCreator';
 import GroupsList from './components/groups/GroupsList';
+import EventsList from './components/events/EventsList';
+import EventCreator from './components/events/EventCreator';
 import FlashMessagesList from './components/flash/FlashMessageList';
 import setAuthToken from './utils/setAuthToken';
 import { setCurrentUser } from './actions/authActions';
@@ -42,6 +44,10 @@ class App extends Component {
                 <Route path="/groups/create/:id" component={ requireAuth(GroupCreator) }/>
                 <Route path="/groups/create" component={ requireAuth(GroupCreator) }/>
                 <Route path="/groups" component={ requireAuth(GroupsList) }/>
+              </Switch>
+              <Switch>
+                <Route path="/events/create" component={ requireAuth(EventCreator) } />
+                <Route path="/events" component={ requireAuth(EventsList) } />
               </Switch>
             </div>
           </div>
