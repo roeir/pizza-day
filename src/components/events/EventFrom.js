@@ -14,25 +14,25 @@ const EventForm = ({ onChange, formValues, isLoading, errors, onSubmit, onDateCh
       <p>Event information:</p>
       <form onSubmit={ onSubmit }>
         <TextFieldGroup
-          name="eventName"
-          value={ formValues.eventName }
+          name="name"
+          value={ formValues.name }
           label="Event name"
-          error={ errors.eventName }
+          error={ errors.name }
           onChange={ onChange }
         />
 
         <TextFieldGroup
-          name="eventLogo"
-          value={ formValues.eventLogo }
+          name="logo"
+          value={ formValues.logo }
           label="Event logo"
           placeholder="http://example.com/image-url"
-          error={ errors.eventLogo }
+          error={ errors.logo }
           onChange={ onChange }
         />
 
         <DatePicker
           customInput={ <CustomDatePicker label="Event date" /> }
-          selected={ formValues.startDate }
+          selected={ formValues.date }
           minDate={ moment() }
           onChange={ onDateChange }
         />
@@ -40,11 +40,11 @@ const EventForm = ({ onChange, formValues, isLoading, errors, onSubmit, onDateCh
         <div className="form-group">
           <label className="control-label">Status</label>
           <select
-            name="eventStatus"
+            name="status"
             onChange={ onChange }
             className="form-control"
             disabled={ false }
-            value={ formValues.eventStatus }
+            value={ formValues.status }
           >
             <option value="ordering">Ordering</option>
             <option value="ordered">Ordered</option>
@@ -53,12 +53,12 @@ const EventForm = ({ onChange, formValues, isLoading, errors, onSubmit, onDateCh
           </select>
         </div>
 
-        <div className={ classnames("form-group", {'has-error': errors.eventGroups}) }>
+        <div className={ classnames("form-group", {'has-error': errors.groups}) }>
           <label className="control-label">
             Select user groups (use Ctrl or Shift key to select multiple):
           </label>
           <select
-            name="eventGroups"
+            name="groups"
             className="form-control"
             multiple={ true }
             onChange={ onGroupChange }
@@ -76,7 +76,7 @@ const EventForm = ({ onChange, formValues, isLoading, errors, onSubmit, onDateCh
               })
             }
           </select>
-          { errors.eventGroups && <span className="help-block">{ errors.eventGroups }</span> }
+          { errors.groups && <span className="help-block">{ errors.groups }</span> }
         </div>
 
         <div className="form-group">

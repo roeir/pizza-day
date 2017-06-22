@@ -5,8 +5,7 @@ const Schema = mongoose.Schema;
 const EventSchema = new Schema({
   name: {
     type: String,
-    required: true,
-    unique: true
+    required: true
   },
   logo: {
     type: String,
@@ -17,12 +16,22 @@ const EventSchema = new Schema({
     ref: 'User',
     required: true
   },
+  status: {
+    type: String,
+    required: true
+  },
+  date: {
+    type: Date,
+    required: true
+  },
   users: [{
     user: {
       type: Schema.Types.ObjectId,
       ref: 'User'
     },
-    confirmed: Boolean
+    confirmed: {
+      type: Boolean
+    }
   }]
 }, {timestamps: true});
 

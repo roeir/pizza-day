@@ -20,6 +20,10 @@ const UserSchema = new Schema({
   groups: [{
     type: Schema.Types.ObjectId,
     ref: 'Group'
+  }],
+  events: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Event'
   }]
 }, {timestamps: true});
 

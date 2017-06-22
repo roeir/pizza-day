@@ -30,7 +30,7 @@ router.post('/', (req, res) => {
   const users = invitedUsers.map(userId => {
     return {
       user: userId,
-      confirmed: userId === req.currentUser._id.toString()
+      confirmed: false
     }
   });
 
@@ -83,6 +83,9 @@ router.post('/', (req, res) => {
             user.confirmed = prevGroupUsers.some(prevUser => {
               return user.user.toString() === prevUser.user.toString();
             });
+            if(user.user.toString() === req.currentUser._id.toString()) {
+              user.confirmed = true;
+            }
             return user;
           });
 
@@ -113,7 +116,7 @@ router.post('/', (req, res) => {
             res.status(500).json({error: err});
           });
 
-          res.status(201).json({ success: true });
+          res.json({ success: true });
         }).catch((err) => {
           res.status(500).json({error: err});
         });

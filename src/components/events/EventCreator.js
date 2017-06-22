@@ -13,20 +13,20 @@ import EventForm from './EventFrom';
 const validateInput = (data) => {
   const errors = {};
 
-  if (Validator.isEmpty(data.eventName)) {
-    errors.eventName = 'The event name field is required';
+  if (Validator.isEmpty(data.name)) {
+    errors.name = 'The event name field is required';
   }
 
-  if (Validator.isEmpty(data.eventLogo)) {
-    errors.eventLogo = 'The event logo field is required';
+  if (Validator.isEmpty(data.logo)) {
+    errors.logo = 'The event logo field is required';
   }
 
-  if (!Validator.isURL(data.eventLogo)) {
-    errors.groupLogo = 'The event logo field must be a correct url addres'
+  if (!Validator.isURL(data.logo)) {
+    errors.logo = 'The event logo field must be a correct url addres'
   }
 
-  if(isEmpty(data.eventGroups)) {
-    errors.eventGroups = 'Must be selected at least one of options'
+  if(isEmpty(data.groups)) {
+    errors.groups = 'Must be selected at least one of options'
   }
 
   return {
@@ -44,11 +44,11 @@ class EventCreator extends Component {
 
   state = {
     formValues: {
-      eventGroups: [],
-      eventName: '',
-      eventLogo: '',
-      eventStatus: 'ordering',
-      startDate: moment()
+      groups: [],
+      name: '',
+      logo: '',
+      status: 'ordering',
+      date: moment()
     },
     groups: [],
     redirect: false,
@@ -71,7 +71,7 @@ class EventCreator extends Component {
     this.setState({
       formValues: {
         ...formValues,
-        startDate: date
+        date
       }
     });
   };
@@ -84,7 +84,7 @@ class EventCreator extends Component {
     this.setState({
       formValues: {
         ...formValues,
-        eventGroups: selectedGroups
+        groups: selectedGroups
       }
     });
   };

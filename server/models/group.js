@@ -5,8 +5,7 @@ const Schema = mongoose.Schema;
 const GroupSchema = new Schema({
   name: {
     type: String,
-    required: true,
-    unique: true
+    required: true
   },
   logo: {
     type: String,
@@ -22,7 +21,9 @@ const GroupSchema = new Schema({
       type: Schema.Types.ObjectId,
       ref: 'User'
     },
-    confirmed: Boolean
+    confirmed: {
+      type: Boolean
+    }
   }]
 }, {timestamps: true});
 
