@@ -104,7 +104,7 @@ class EventCreator extends Component {
 
     this.setState({
       errors: {},
-      // isLoading: true
+      isLoading: true
     });
 
     this.props.createEventRequest(formValues)

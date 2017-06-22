@@ -78,7 +78,14 @@ router.post('/', (req, res) => {
 
 
           // Create new group user list
-          group.users = users;
+          // if user was confirm invite before, change confirmed field to true
+          group.users = users.map(user => {
+            user.confirmed = prevGroupUsers.some(prevUser => {
+              return user.user.toString() === prevUser.user.toString();
+            });
+            return user;
+          });
+
           group.save(err => {
             if(err) {
               res.status(500).json({error: err});
