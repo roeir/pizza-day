@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import moment from 'moment';
 import './Card.css';
 
-const Card = ({ _id, createdBy, name, logo, users, currentUser, handleUserJoin }) => {
+const Card = ({ item, handleUserJoin, currentUser }) => {
+  const { _id, createdBy, name, logo, users, status, date } = item;
   const joinedStatus = users.find(item => {
     return currentUser.id === item.user
   });
@@ -26,12 +28,15 @@ const Card = ({ _id, createdBy, name, logo, users, currentUser, handleUserJoin }
   );
 
   const invitedHtml = (
-    <p>
-      <button
-        onClick={() => { handleUserJoin(_id) }}
-        type="button"
-        className="btn btn-primary">Join</button>
-    </p>
+    <div>
+      <p>
+        <button
+          onClick={() => { handleUserJoin(_id) }}
+          type="button"
+          className="btn btn-primary">Join
+        </button>
+      </p>
+    </div>
   );
 
   return (
@@ -44,6 +49,20 @@ const Card = ({ _id, createdBy, name, logo, users, currentUser, handleUserJoin }
               joinedStatus.confirmed ?
                 joinedHtml : invitedHtml
             }
+            {
+              status && (
+                <p className="status">
+                  { status }
+                </p>
+              )
+            }
+            {
+              date && (
+                <p className="date">
+                  { moment(date).format('LL') }
+                </p>
+              )
+            }
           </div>
       </div>
     </div>
@@ -51,12 +70,8 @@ const Card = ({ _id, createdBy, name, logo, users, currentUser, handleUserJoin }
 };
 
 Card.propTypes = {
-  _id: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  createdBy: PropTypes.string.isRequired,
-  logo: PropTypes.string.isRequired,
+  item: PropTypes.object.isRequired,
   currentUser: PropTypes.object.isRequired,
-  users: PropTypes.arrayOf(PropTypes.object).isRequired,
   handleUserJoin: PropTypes.func.isRequired
 };
 

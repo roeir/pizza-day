@@ -13,12 +13,12 @@ const EventList = ({ currentUser, fetchUserEvents, joinUserRequest, addFlashMess
         <div className="page-header">
           <h1>User events <small><Link to="/events/create">create new</Link></small></h1>
         </div>
-        {/*<CardsList*/}
-          {/*currentUser={ currentUser }*/}
-          {/*fetchData={ fetchUserEvents }*/}
-          {/*joinRequest={ joinUserRequest }*/}
-          {/*addFlashMessage={ addFlashMessage }*/}
-        {/*/>*/}
+        <CardsList
+          currentUser={ currentUser }
+          fetchData={ fetchUserEvents }
+          joinRequest={ joinUserRequest }
+          addFlashMessage={ addFlashMessage }
+        />
       </div>
     </div>
   )

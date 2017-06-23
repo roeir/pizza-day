@@ -78,7 +78,7 @@ class CardsList extends Component {
                   handleUserJoin={ this.handleUserJoin }
                   key={ item._id }
                   currentUser={ this.props.currentUser }
-                  { ...item }
+                  item={ item }
                 />
               )
             })
