@@ -161,4 +161,16 @@ router.put('/:eventId', (req, res) => {
   });
 });
 
+router.put('/:eventId/status', (req, res) => {
+  const { eventId } = req.params;
+
+  Event.findByIdAndUpdate(eventId, { $set: { status: req.body.status } })
+    .then(() => {
+      res.json({ success: true });
+    })
+    .catch(err => {
+      res.status(500).json({ error: err });
+    })
+});
+
 module.exports = router;

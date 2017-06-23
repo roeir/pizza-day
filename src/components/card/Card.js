@@ -16,11 +16,21 @@ const Card = ({ item, handleUserJoin, currentUser }) => {
       {
         (createdBy === currentUser.id) && (
           <p>
-            <Link
-              className="btn btn-primary"
-              to={{ pathname: `/groups/create/${_id}`, state: { users, name, logo} }}>
-              Edit
-            </Link>
+            {
+              !status ? (
+                <Link
+                  className="btn btn-primary"
+                  to={{ pathname: `/groups/create/${_id}`, state: { users, name, logo} }}>
+                  Edit
+                </Link>
+              ) : (
+                <Link
+                  className="btn btn-primary"
+                  to={{ pathname: `/events/create/${_id}` }}>
+                  Edit Status
+                </Link>
+              )
+            }
           </p>
         )
       }

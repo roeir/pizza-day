@@ -6,6 +6,12 @@ export const fetchUserEvents = () => {
   };
 };
 
+export const updateEventStatus = (eventId, status) => {
+  return (dispatch) => {
+    return axios.put(`/api/events/${ eventId }/status`, status);
+  };
+};
+
 export const joinUserRequest = (eventId, userData) => {
   return (dispatch) => {
     return axios.put(`/api/events/${ eventId }`, userData);
