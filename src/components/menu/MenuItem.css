@@ -1,0 +1,42 @@
+.menu-item {
+    display: flex;
+    padding-bottom: 15px;
+    border-bottom: 1px dashed #BBDEFB;
+    margin-bottom: 15px;
+}
+
+.menu-item__logo {
+    flex-basis: 100px;
+    width: 100px;
+    height: 100px;
+    margin-right: 7px;
+    background-position: center;
+    background-size: cover;
+}
+
+.menu-item__logo img {
+    width: 100%;
+    height: auto;
+}
+
+.menu-item__info {
+    display: flex;
+    flex-direction: column;
+}
+
+.menu-item__info > div {
+    margin-bottom: 7px;
+}
+
+.menu-item__name span,
+.menu-item__price span {
+    color: brown;
+}
+
+.menu-item__controls {
+    margin-top: auto;
+}
+
+.menu-item__controls > button {
+    margin-right: 10px;
+}

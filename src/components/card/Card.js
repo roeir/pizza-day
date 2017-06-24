@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
+import classnames from 'classnames';
 import './Card.css';
 
 const Card = ({ item, handleUserJoin, currentUser }) => {
@@ -24,11 +25,18 @@ const Card = ({ item, handleUserJoin, currentUser }) => {
                   Edit
                 </Link>
               ) : (
-                <Link
-                  className="btn btn-primary"
-                  to={{ pathname: `/events/create/${_id}` }}>
-                  Edit Status
-                </Link>
+                <span className="event-actions">
+                  <Link
+                    className="btn btn-primary"
+                    to={{ pathname: `/events/create/${_id}` }}>
+                    Edit Status
+                  </Link>
+                  <Link
+                    className={ classnames("btn btn-default", { "disabled": status !== 'ordering' }) }
+                    to={{ pathname: `/events/${_id}/order` }}>
+                    Feed Me!
+                  </Link>
+                </span>
               )
             }
           </p>

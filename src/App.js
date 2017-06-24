@@ -12,6 +12,7 @@ import GroupsList from './components/groups/GroupsList';
 import EventsList from './components/events/EventsList';
 import EventCreator from './components/events/EventCreator';
 import EventEditor from './components/events/EventEditor';
+import OrderCreator from './components/order/OrderCreator';
 import FlashMessagesList from './components/flash/FlashMessageList';
 import setAuthToken from './utils/setAuthToken';
 import { setCurrentUser } from './actions/authActions';
@@ -47,6 +48,7 @@ class App extends Component {
                 <Route path="/groups" component={ requireAuth(GroupsList) }/>
               </Switch>
               <Switch>
+                <Route path="/events/:id/order" component={ requireAuth(OrderCreator) } />
                 <Route path="/events/create/:id" component={ requireAuth(EventEditor) }/>
                 <Route path="/events/create" component={ requireAuth(EventCreator) } />
                 <Route path="/events" component={ requireAuth(EventsList) } />
