@@ -1,0 +1,32 @@
+.cart-list__header {
+    display: flex;
+    font-size: 14px;
+    color: cadetblue;
+    text-align: center;
+}
+
+.cart-list__qty,
+.cart-list__remove {
+    flex: 1;
+}
+
+.cart-list__price {
+    flex: 2;
+}
+
+.cart-list__name {
+    flex: 6;
+}
+
+.cart-list__footer {
+    margin-top: 20px;
+    display: flex;
+}
+
+.cart-list__footer span {
+    margin-left: auto;
+}
+
+.order-btn {
+    margin-top: 20px;
+}

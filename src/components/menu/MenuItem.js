@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import './MenuItem.css';
 
 
-const MenuItem = ({ _id, name, logo, price, onEdit }) => {
+const MenuItem = ({ _id, name, logo, price, onEdit, addItem }) => {
   return (
     <li className="menu-item">
       <div
@@ -19,7 +19,11 @@ const MenuItem = ({ _id, name, logo, price, onEdit }) => {
           <span>Price:</span> { price }
         </div>
         <div className="menu-item__controls">
-          <button className="btn btn-primary btn-xs" type="button">
+          <button
+            className="btn btn-primary btn-xs"
+            type="button"
+            onClick={ () => { addItem(_id) } }
+          >
             Order
           </button>
           <button
@@ -39,7 +43,8 @@ MenuItem.propTypes = {
   name: PropTypes.string.isRequired,
   logo: PropTypes.string.isRequired,
   price: PropTypes.string.isRequired,
-  onEdit: PropTypes.func.isRequired
+  onEdit: PropTypes.func.isRequired,
+  addItem: PropTypes.func.isRequired
 };
 
 export default MenuItem

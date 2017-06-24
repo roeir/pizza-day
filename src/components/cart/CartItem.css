@@ -1,0 +1,35 @@
+.cart-item {
+    display: flex;
+    padding: 7px 7px 10px;
+    text-align: center;
+    border-bottom: 1px dashed #BBDEFB;
+}
+
+.cart-item__qty,
+.cart-item__remove {
+    flex: 1;
+}
+
+.cart-item__qty span {
+    color: brown;
+}
+
+.cart-item__price {
+    flex: 2;
+}
+
+.cart-item__price span {
+    color: brown;
+}
+
+.cart-item__name {
+    flex: 6;
+}
+
+.cart-item__remove {
+    opacity: 0.6;
+    color: crimson;
+    font-size: 14px;
+    cursor: pointer;
+    text-align: right;
+}
