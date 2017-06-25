@@ -29,6 +29,11 @@ const EventSchema = new Schema({
       type: Schema.Types.ObjectId,
       ref: 'User'
     },
+    order: [{
+      name: String,
+      price: String,
+      qty: Number
+    }],
     confirmed: {
       type: Boolean
     }

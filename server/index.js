@@ -22,7 +22,7 @@ app.use('/api/menu', authenticate, menu);
 
 app.use(function(err, req, res, next) {
   console.error(err);
-  return res.status(500).json({ status: 'error', code: 'unauthorized' });
+  return res.status(500).json({ status: 'error' });
 });
 
 app.listen(8080, (err) => {

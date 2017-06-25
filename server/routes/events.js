@@ -2,9 +2,12 @@ const express = require('express');
 const mongoose = require('mongoose');
 const isEmpty = require('lodash/isEmpty');
 const Validator = require('validator');
+const map = require('lodash/map');
 const Group = require('../models/group');
 const Event = require('../models/event');
 const User = require('../models/user');
+const Menu = require('../models/menu');
+const mailer = require('../config/mailer');
 
 const router = express.Router();
 
@@ -174,8 +177,118 @@ router.put('/:eventId/status', (req, res) => {
 });
 
 router.post('/:eventId/order', (req, res) => {
-  console.log(req.body);
-  res.json({ success: true });
+  const { eventId } = req.params;
+  Event.findById(eventId).populate('users.user', 'username email').populate('createdBy').exec()
+    .then(event => {
+      const user = event.users.find(user => {
+        return user.user._id.toString() === req.currentUser._id.toString();
+      });
+
+      const orderIds = map(req.body, (qty, id) => {
+        return id;
+      });
+
+      Menu.find({ _id: { $in: orderIds } }, 'name price')
+        .then(items => {
+          user.order = map(req.body, (qty, id) => {
+            const item = items.find(item => {
+              return item._id.toString() === id;
+            });
+            return {
+              name: item.name,
+              price: item.price,
+              qty
+            };
+          });
+
+          event.save();
+
+          // if all event users have already ordered change event status and send emails
+          if(event.users.every(usersOrdered)) {
+            event.status = 'ordered';
+            // make queries for all event participants
+            const mailQueries = event.users.map(user => {
+              return new Promise((resolve, reject) => {
+                mailer.sendMail({
+                  from: 'skrebets.andrew@yandex.ru',
+                  to: user.user.email,
+                  subject: 'Pizza Day Order',
+                  template: 'pizza-order',
+                  context: {
+                    order: user.order,
+                    total: getTotalPrice(user.order)
+                  }
+                }, (err, info) => {
+                  if(err) {
+                    reject(err);
+                  } else {
+                    resolve(info);
+                  }
+                });
+              });
+            });
+
+            // add event creator email query
+            mailQueries.push(new Promise((resolve, reject) => {
+              mailer.sendMail({
+                from: 'skrebets.andrew@yandex.ru',
+                to: event.createdBy.email,
+                subject: 'Pizza Day Order',
+                template: 'pizza-order-creator',
+                context: {
+                  order: getUserOrders(event.users),
+                  total: getEventPrice(event.users)
+                }
+              }, (err, info) => {
+                if(err) {
+                  reject(err);
+                } else {
+                  resolve(info);
+                }
+              });
+            }));
+
+            Promise.all(mailQueries).then(() => {
+              console.log('mails sended');
+            }).catch(err => {
+              console.log(err.message);
+              // res.status(500).json({ error: err });
+            });
+          }
+        });
+
+      res.json({ success: true });
+    })
+    .catch(err => {
+      res.json({ error: err });
+    });
 });
+
+const getEventPrice = users => {
+  return users.reduce((total, user) => {
+    return total + getTotalPrice(user.order);
+  }, 0);
+};
+
+const getUserOrders = users => {
+  return users.map(user => {
+    return {
+      username: user.user.username,
+      total: getTotalPrice(user.order),
+      order: user.order
+    };
+  });
+};
+
+const getTotalPrice = list => {
+  return list.reduce((total, item) => {
+    const priceStr = item.price.replace(/\$/g, '');
+    return total + Math.floor((parseFloat(priceStr) * item.qty) * 100) / 100;
+  }, 0);
+};
+
+const usersOrdered = user => {
+  return !isEmpty(user.order);
+};
 
 module.exports = router;

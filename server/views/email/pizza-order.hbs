@@ -1,0 +1,7 @@
+<h1 style="text-align: center">Your order:</h1>
+<ul>
+    {{#each order}}
+        <li>Name: {{this.name}}, Quantity: {{this.qty}}</li>
+    {{/each}}
+</ul>
+<h3 style="text-align: center">Total Price: ${{this.total}}</h3>

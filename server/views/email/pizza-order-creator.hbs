@@ -1,0 +1,15 @@
+<h1 style="text-align: center">Event summary:</h1>
+<ul>
+    {{#each order}}
+        <li>
+            <p>Order for: {{this.username}}</p>
+            <ol>
+                {{#each this.order}}
+                    <li>Name: {{this.name}}, Quantity: {{this.qty}}</li>
+                {{/each}}
+            </ol>
+            <p>Price: {{this.total}}</p>
+        </li>
+    {{/each}}
+</ul>
+<h3 style="text-align: center">Total Price: ${{this.total}}</h3>
